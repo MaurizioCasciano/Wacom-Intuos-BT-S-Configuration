@@ -1,0 +1,46 @@
+version: 3
+
+dotenv: ['.env']
+
+tasks:
+  setup:
+    cmds:
+      - sudo apt install xserver-xorg-input-wacom
+  devices:
+    cmds:
+      - xsetwacom list devices
+  configure:
+    cmds:
+      - task: configure-pad
+      - task: configure-stylus
+  configure-pad:
+    cmds:
+      - xsetwacom --set "Wacom Intuos BT S Pad pad" Button 1 "key ctrl z" # Undo
+      - xsetwacom --set "Wacom Intuos BT S Pad pad" Button 2 "key ctrl y" # Redo
+      - xsetwacom --set "Wacom Intuos BT S Pad pad" Button 3 "key ctrl shift p" # Pen
+      - xsetwacom --set "Wacom Intuos BT S Pad pad" Button 8 "key ctrl shift e" # Eraser
+  configure-stylus:
+    cmds:
+      - xsetwacom --set "Wacom Intuos BT S Pen stylus" Button 2 "key ctrl shift p" # Pen
+      - xsetwacom --set "Wacom Intuos BT S Pen stylus" Button 3 "key ctrl shift e" # Eraser
+  dump:
+    cmds:
+      - task: dump-pad
+      - task: dump-stylus
+      - cat dump/wacom-pad-config.sh dump/wacom-stylus-config.sh > dump/wacom-config.sh
+  dump-pad:
+    cmds:
+      - mkdir -p dump
+      - xsetwacom --shell --get "Wacom Intuos BT S Pad pad" Button 1 > dump/wacom-pad-config.sh
+      - xsetwacom --shell --get "Wacom Intuos BT S Pad pad" Button 2 >> dump/wacom-pad-config.sh
+      - xsetwacom --shell --get "Wacom Intuos BT S Pad pad" Button 3 >> dump/wacom-pad-config.sh
+      - xsetwacom --shell --get "Wacom Intuos BT S Pad pad" Button 8 >> dump/wacom-pad-config.sh
+  dump-stylus:
+    cmds:
+      - mkdir -p dump
+      - xsetwacom --shell --get "Wacom Intuos BT S Pen stylus" Button 2 > dump/wacom-stylus-config.sh
+      - xsetwacom --shell --get "Wacom Intuos BT S Pen stylus" Button 3 >> dump/wacom-stylus-config.sh
+  install:
+    cmds:
+      - chmod +x dump/wacom-config.sh
+      - sudo cp dump/wacom-config.sh /usr/bin/wacom-config

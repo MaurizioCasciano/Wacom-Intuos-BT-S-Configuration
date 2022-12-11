@@ -1,1 +1,1 @@
-# Wacom-Intuos-Bluetooth-Small-Configuration
+# Wacom Intuos Bluetooth Small Configuration
