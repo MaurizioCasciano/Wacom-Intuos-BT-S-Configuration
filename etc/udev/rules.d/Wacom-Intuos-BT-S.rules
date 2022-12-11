@@ -1,0 +1,1 @@
+ACTION=="add" ATTRS{idVendor}=="056a", ATTRS{idProduct}=="03c5", RUN+="/usr/bin/wacom-config"

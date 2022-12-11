@@ -27,7 +27,8 @@ tasks:
     cmds:
       - task: dump-pad
       - task: dump-stylus
-      - cat dump/wacom-pad-config.sh dump/wacom-stylus-config.sh > dump/wacom-config.sh
+      - echo "export DISPLAY=$DISPLAY" > dump/wacom-config.sh
+      - cat dump/wacom-pad-config.sh dump/wacom-stylus-config.sh >> dump/wacom-config.sh
   dump-pad:
     cmds:
       - mkdir -p dump
@@ -44,3 +45,5 @@ tasks:
     cmds:
       - chmod +x dump/wacom-config.sh
       - sudo cp dump/wacom-config.sh /usr/bin/wacom-config
+      - sudo cp etc/udev/rules.d/Wacom-Intuos-BT-S.rules /etc/udev/rules.d/Wacom-Intuos-BT-S.rules
+      - sudo udevadm control --reload
